@@ -1,0 +1,53 @@
+const [board, setBoard] = useState(Array(9).fill(null));
+  const [player, setPlayer] = useState(null);
+  const [currentTurn, setCurrentTurn] = useState('X');
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    // Connect to WebSocket server
+    const ws = new WebSocket('ws://localhost:8080');
+    setSocket(ws);
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === 'start') {
+        setPlayer(data.player); // Assign player (X or O)
+      } else if (data.type === 'move') {
+        // Update board with opponent's move
+        const updatedBoard = [...board];
+        updatedBoard[data.move] = data.player_name;
+        setBoard(updatedBoard);
+        setCurrentTurn(currentTurn === 'X' ? 'O' : 'X');
+      }
+    };
+
+    return () => ws.close();
+  }, [board]);
+
+  const handleClick = (index) => {
+    if (!board[index] && currentTurn === player) {
+      const updatedBoard = [...board];
+      updatedBoard[index] = player;
+      setBoard(updatedBoard);
+      setCurrentTurn(currentTurn === 'X' ? 'O' : 'X');
+
+      // Send move to server
+      socket.send(JSON.stringify({ type: 'move', move: index, player_name:player  }));
+    }
+  };
+
+
+
+
+  // Before:
+setBoard(updatedBoard);
+setCurrentTurn(currentTurn === 'X' ? 'O' : 'X');
+
+// After:
+setBoard(prevBoard => {
+  const updatedBoard = [...prevBoard];
+  updatedBoard[data.move] = data.player_name;
+  return updatedBoard;
+});
+setCurrentTurn(prevTurn => prevTurn === 'X' ? 'O' : 'X');

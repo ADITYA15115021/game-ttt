@@ -1,72 +1,177 @@
 import { useState, useEffect } from 'react';
 
 const OnlineGame = () => {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [player, setPlayer] = useState(null);
-  const [currentTurn, setCurrentTurn] = useState('X');
-  const [socket, setSocket] = useState(null);
 
-  useEffect(() => {
+  const [board, setBoard] = useState(Array(9).fill(null));
+const [player, setPlayer] = useState(null);
+const [currentTurn, setCurrentTurn] = useState('X');
+const [socket, setSocket] = useState(null);
+const [winner, setWinner] = useState(null);
+
+useEffect(() => {
     // Connect to WebSocket server
     const ws = new WebSocket('ws://localhost:8080');
+    setSocket(ws);
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
       if (data.type === 'start') {
         setPlayer(data.player); // Assign player (X or O)
-      } else if (data.type === 'move') {
+      }else if (data.type === 'move'){
         // Update board with opponent's move
-        const updatedBoard = [...board];
-        updatedBoard[data.move] = data.player;
-        setBoard(updatedBoard);
-        setCurrentTurn(data.player === 'X' ? 'O' : 'X');
+        setBoard(prevBoard => {
+          const updatedBoard = [...prevBoard];
+          updatedBoard[data.move] = data.player_name;
+          
+          const gameWinner = checkWinner(updatedBoard);
+          if (gameWinner) {
+            setWinner(gameWinner);
+          }
+          
+          return updatedBoard;
+        });
+        setCurrentTurn(prevTurn => prevTurn === 'X' ? 'O' : 'X');
       }
     };
 
-    setSocket(ws);
-
     return () => ws.close();
-  }, [board]);
+}, []); // Empty dependency array
 
-  const handleClick = (index) => {
-    if (!board[index] && currentTurn === player) {
+const handleClick = (index) => {
+    if (!board[index] && currentTurn === player && !winner){
+
       const updatedBoard = [...board];
       updatedBoard[index] = player;
+
+      const gameWinner = checkWinner(updatedBoard);
+      if (gameWinner) {
+        setWinner(gameWinner);
+      }
+
       setBoard(updatedBoard);
-      setCurrentTurn(player === 'X' ? 'O' : 'X');
+
+      setCurrentTurn(currentTurn === 'X' ? 'O' : 'X');
 
       // Send move to server
-      socket.send(JSON.stringify({ type: 'move', move: index, player }));
+      socket.send(JSON.stringify({ type: 'move', move: index, player_name: player }));
     }
-  };
+};
 
-  return (
-    <div>
-      <h1>Tic Tac Toe</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 100px)', gap: '5px' }}>
-        {board.map((cell, index) => (
-          <div
-            key={index}
-            onClick={() => handleClick(index)}
-            style={{
-              width: '100px',
-              height: '100px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#ddd',
-              fontSize: '24px',
-              cursor: 'pointer',
-            }}
-          >
-            {cell}
+const checkWinner = (squares) => {
+  const lines = [
+    [0, 1, 2], // rows
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6], // columns
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8], // diagonals
+    [2, 4, 6]
+  ];
+
+  for (let line of lines) {
+    const [a, b, c] = line;
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+};
+
+const getGameStatus = () => {
+  if (winner) {
+    return winner === player ? 
+      "Congratulations! You Won! 🎉" : 
+      "Game Over - You Lost!";
+  } else if (board.every(cell => cell !== null)) {
+    return "Game Draw!";
+  } else {
+    return currentTurn === player ? 
+      "Your turn" : 
+      "Opponent's turn";
+  }
+};
+
+
+  
+
+
+
+  if( !player ){
+
+    return (
+    <>
+
+      <div className='h-screen bg-black flex flex-col justify-center'>
+        <div className='flex flex-row justify-center'>
+          <div className='text-white text-xl'>
+              waiting for second player to join .....
           </div>
-        ))}
+           
+        </div>
+        
+        
       </div>
-      <h2>{player ? `You are: ${player}` : 'Waiting for an opponent...'}</h2>
+         
+     
+      </>
+    )
+  }else{
+
+    return (
+      
+      <>
+
+      <div className='h-screen bg-black flex flex-col justify-center '>
+        
+        <div className='h-12 mb-16  text-white text-4xl flex justify-center items-center'>
+          {getGameStatus()}
+        </div>
+        
+        <div className=' flex flex-row justify-center'>
+           <div className='grid grid-cols-3 grid-rows-3 gap-1 w-64 h-64'>
+              
+              {board.map((cell, index) => (
+                <div className='bg-gray-200 flex items-center justify-center h-full border rounded-lg border-gray-400'
+                  key={index}
+                  onClick={() => handleClick(index)}
+                  disabled={winner || cell !== null}
+                >
+                 {cell}
+                 </div> ) ) }
+           </div>
+
+          
+
+        </div>
+
+        {winner && (
+          <div className=' flex justify-center'>
+             <button className='w-28 mt-8  rounded-full h-12 bg-green-900 text-white' >PLAY AGAIN</button>
+          </div>  
+           
+           )}
+
     </div>
-  );
+        
+        
+    </>
+            
+        
+
+      
+    );
+
+
+  }
+
+  
 };
 
 export default OnlineGame;
+
+
+
+
+

@@ -8,11 +8,11 @@ export default function Main(){
    
     return (
         <>
-          <div className="h-screen flex flex-row justify-center">
+          <div className="h-screen bg-black flex flex-row justify-center">
             
-            <div className="w-1/2 border border-black flex flex-col justify-center">
+            <div className="w-1/3 border border-black flex flex-col justify-center">
                  
-                 <div className="h-1/4 border border-red-700 flex flex-row justify-between">
+                 <div className="h-1/4 border border-red-700 flex flex-col justify-evenly">
                      
                      <div onClick={()=>{navigate("/t-online")}} className="border rounded m-2 px-8 flex items-center justify-center
                                     hover:scale-105 hover:bg-red-400 transition-all bg-red-100">

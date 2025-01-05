@@ -11,34 +11,49 @@ export default function Landing(){
         <>
 
         <div className="px-8 flex flex-row justify-between
-                         h-16 border-2 border-red-200">
+                        bg-black h-24 border-b  border-gray-100
+                        ">
             
-            <div>
-            Welcome,signup to save your records
+            <div className="flex flex-row justify-center items-center
+                            text-white">
+                 WELCOME, 
             </div>
             
-            <div className="flex fex-row justify-evenly w-1/3 ">
-               <button onClick={()=>{navigate("/signup")}} className="bg-red-100 hover:bg-red-200 px-2 mt-2 mb-2 border border-red-800 rounded-lg  ">SIGN UP </button>
-               <button className="px-2 mt-2 mb-2 border border-red-800 rounded-lg">LOG IN</button>
+            <div className="flex fex-row justify-evenly items-center w-1/3">
+               <button onClick={()=>{navigate("/signup")}} 
+                className="h-12 bg-green-600 hover:bg-green-400 px-2 mt-2 mb-2 rounded-lg shadow-md shadow-green-200 ">SIGN UP </button>
+               
+               <button className="h-12 px-2 mt-2 mb-2 bg-green-600 rounded-lg  shadow-green-200 shadow-md">LOG IN</button>
             </div>
             
         </div>
 
-          <div className="m-4 grid grid-cols-3 gap-4" >
-       
-       
-       <div onClick={ ()=>{navigate("tic-tac-toe")} } className="flex items-center justify-center h-32 bg-red-100 border rounded-lg border-red-700
-                       hover:scale-105 hover:bg-red-200 transition-all duration-800">
-                 TIC-TAC-TOE
-       </div>
-        
- 
-       <div className="bg-red-300"> 2</div>
-       <div className="border rounded-lg bg-red-400">3</div>
- 
-       
-         
-      </div>
-        </>
+
+    <div className="h-screen bg-black border border-black flex flex-col justify-center">
+        <div className="    flex flex-row justify-center w-full">
+
+            <div className="  m-4 grid grid-cols-2 gap-3 w-1/2 h-64" >
+                <div onClick={ ()=>{navigate("/tic-tac-toe")} } 
+                className="flex items-center justify-center h-32 bg-white shadow-md shadow-white rounded-lg border-red-700
+                                hover:scale-105 hover:bg-red-200 transition-all duration-800
+                                text-lg font-bold ">
+                            TIC-TAC-TOE
+                </div>
+
+                <div  className="flex items-center justify-center h-32 bg-white  rounded-lg shadow-md shadow-white
+                                 hover:scale-105 hover:bg-red-200 transition-all duration-800
+                                 font-bold text-lg">
+                            MATCH-3
+            
+                </div>
+
+        </div>
+
+        </div>
+    </div>    
+
+   
+
+    </>
     )
 }

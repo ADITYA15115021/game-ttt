@@ -45,6 +45,9 @@ app.post( "/signup", authenticateInput,async (req,res)=>{
       //what is the  tradeoff ? a network request or computational cost 
       const password = req.body.password;
       const hashedPassword = await bcrypt.hash(password,5);
+      
+      //making the db query and returning a jwt token;
+
 
       return res.json( { msg : "user entered" , hash : hashedPassword} );
     

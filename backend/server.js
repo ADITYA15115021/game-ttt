@@ -22,13 +22,15 @@ wss.on('connection', (socket) => {
   }
 
   socket.on('message', (message) => {
+
     const data = JSON.parse(message);
 
     if (data.type === 'move') {
       // Broadcast the move to the other player
+      console.log("player : ",data.player_name, " move :",data.move);
       players.forEach((player) => {
         if (player !== socket) {
-          player.send(JSON.stringify({ type: 'move', move: data.move, player: data.player }));
+          player.send(JSON.stringify({ type: 'move', move: data.move, player_name: data.player_name }));
         }
       });
     }
@@ -41,5 +43,5 @@ wss.on('connection', (socket) => {
 });
 
 server.listen(8080, function() {
-    console.log((new Date()) + ' Server is listening on port 8080');
+    console.log(' Server is listening on port 8080');
 });
