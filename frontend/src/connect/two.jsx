@@ -14,7 +14,7 @@ const ConnectFour = () => {
 
   useEffect(() => {
     // Connect to WebSocket server
-    const ws = new WebSocket('ws://localhost:8080/connect4');
+    const ws = new WebSocket('wss://ak-backend1.xyz/connect4');
     setSocket(ws);
 
     ws.onmessage = (event) => {
