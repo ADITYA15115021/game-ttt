@@ -7,6 +7,7 @@ import Main from "./tic-tac-toe/main";
 import OnlineGame from "./tic-tac-toe/online";
 import SignUp from "./signup";
 import HomePage from "./homepage";
+import ConnectFour from "./connect/two.jsx";
 
 
 function App(){
@@ -14,12 +15,13 @@ function App(){
     <>
      <BrowserRouter>
        <Routes>
-        <Route path="landing" element={<Landing/>}>  </Route>
+        <Route path="/landing" element={<Landing/>}>  </Route>
         <Route path="/signup" element={<SignUp/>}></Route>
-        <Route path="tic-tac-toe" element={<Main/>}></Route>
-        <Route path="t-online" element={<OnlineGame/>}></Route>
-        <Route path="t-vsc"></Route>
+        <Route path="/tic-tac-toe" element={<Main/>}></Route>
+        <Route path="/t-online" element={<OnlineGame/>}></Route>
+        <Route path="/t-vsc"></Route>
         <Route path="/" element={<HomePage/>} ></Route>
+        <Route path="/connect-four" element={<ConnectFour/>}></Route>
        </Routes>
      </BrowserRouter>
     

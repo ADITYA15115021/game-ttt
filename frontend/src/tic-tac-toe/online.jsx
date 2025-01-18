@@ -10,7 +10,7 @@ const [winner, setWinner] = useState(null);
 
 useEffect(() => {
     // Connect to WebSocket server
-    const ws = new WebSocket('ws://localhost:8080');
+    const ws = new WebSocket('ws://localhost:8080/tictactoe');
     setSocket(ws);
 
     ws.onmessage = (event) => {

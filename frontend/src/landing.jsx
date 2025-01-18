@@ -40,10 +40,10 @@ export default function Landing(){
                             TIC-TAC-TOE
                 </div>
 
-                <div  className="flex items-center justify-center h-32 bg-white  rounded-lg shadow-md shadow-white
+                <div onClick={()=>{navigate("/connect-four")}} className="flex items-center justify-center h-32 bg-white  rounded-lg shadow-md shadow-white
                                  hover:scale-105 hover:bg-red-200 transition-all duration-800
                                  font-bold text-lg">
-                            MATCH-3
+                            CONNECT-4
             
                 </div>
 
